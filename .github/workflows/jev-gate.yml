@@ -1,0 +1,37 @@
+name: jev-gate
+
+# pull_request_target hands the job secrets for fork PRs too, so nothing
+# from the PR may run here: the workflow and gates file come from the base,
+# and PYTHONSAFEPATH stops Python importing modules from the PR checkout.
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jev-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    if: github.actor != 'renovate[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: git show "$BASE:.github/jev-gates.yml" > "$RUNNER_TEMP/jev-gates.yml"
+      - uses: lymagics/jev-gate@v0.0.5
+        with:
+          config: ${{ runner.temp }}/jev-gates.yml
+          mode: diff
+          base: ${{ github.event.pull_request.base.sha }}
+        env:
+          PYTHONSAFEPATH: "1"
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}

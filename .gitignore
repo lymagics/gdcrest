@@ -1,0 +1,25 @@
+# Godot
+.godot/
+*.translation
+export_presets.cfg
+
+# gdUnit4 is fetched by `make install`, never committed
+/addons/gdUnit4/
+/reports/
+
+# Godot binary downloaded in CI
+/.godot-bin/
+
+# Test scratch files
+/tmp/*
+!/tmp/.gdignore
+
+# Python tools (gdtoolkit)
+.venv/
+__pycache__/
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

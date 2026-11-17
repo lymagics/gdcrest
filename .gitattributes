@@ -1,0 +1,7 @@
+# Normalize line endings; Godot and gdtoolkit expect LF.
+* text=auto eol=lf
+*.png binary
+
+# The release zip (git archive) holds only the addon.
+/* export-ignore
+/addons -export-ignore

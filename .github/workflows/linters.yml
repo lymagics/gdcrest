@@ -1,0 +1,41 @@
+name: linters
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+  workflow_call:
+
+jobs:
+  linters:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GODOT_VERSION: "4.7.2"
+      GODOT: ${{ github.workspace }}/.godot-bin/godot
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Install gdtoolkit
+        run: pip install "gdtoolkit==4.5.0"
+      - name: Set up Godot
+        run: |
+          mkdir -p .godot-bin && touch .godot-bin/.gdignore
+          curl -sSfL -o godot.zip \
+            "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q godot.zip -d .godot-bin
+          mv .godot-bin/Godot_v${GODOT_VERSION}-stable_linux.x86_64 "$GODOT"
+          rm godot.zip
+      - name: Install gdUnit4
+        run: make install
+      - name: gdformat
+        run: make format
+      - name: gdlint
+        run: make lint
+      - name: Script warnings
+        run: make warnings
+      - name: Global names
+        run: make names

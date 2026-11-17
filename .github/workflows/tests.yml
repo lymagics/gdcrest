@@ -1,0 +1,44 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+  workflow_call:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Oldest supported pair.
+          - godot: "4.5.1"
+            gdunit4: "6.2.3"
+          # Newest pair. Moves to gdUnit4 7.0.x once it is released.
+          - godot: "4.7.2"
+            gdunit4: "6.2.3"
+    env:
+      GODOT: ${{ github.workspace }}/.godot-bin/godot
+      GDUNIT4_VERSION: ${{ matrix.gdunit4 }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Godot ${{ matrix.godot }}
+        run: |
+          mkdir -p .godot-bin && touch .godot-bin/.gdignore
+          curl -sSfL -o godot.zip \
+            "https://github.com/godotengine/godot-builds/releases/download/${{ matrix.godot }}-stable/Godot_v${{ matrix.godot }}-stable_linux.x86_64.zip"
+          unzip -q godot.zip -d .godot-bin
+          mv .godot-bin/Godot_v${{ matrix.godot }}-stable_linux.x86_64 "$GODOT"
+          rm godot.zip
+          "$GODOT" --version
+      - name: Unit tests
+        uses: lymagics/aka-midori@v0.0.2
+        with:
+          install: make install
+          test: make unit
+      - name: Deep tests
+        run: make deep
