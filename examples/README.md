@@ -23,11 +23,11 @@ Every test is a single statement: the reason, the actual value, then the matcher
 
 ```gdscript
 func test_capitalizes_a_snake_case_name() -> void:
-	Assertion.new(
-		"capitalize() must turn a snake_case name into words with capitals",
-		"move_speed".capitalize(),
-		IsEqual.new("Move Speed"),
-	).affirm()
+    Assertion.new(
+        "capitalize() must turn a snake_case name into words with capitals",
+        "move_speed".capitalize(),
+        IsEqual.new("Move Speed"),
+    ).affirm()
 ```
 
 The reason is a full sentence saying what must be true. It becomes the first line of the failure
@@ -37,9 +37,9 @@ message, so write it for whoever reads that message. An empty reason fails the t
 
 ```gdscript
 Assertion.new(
-	"to_float() must give a float, which IsEqual never confuses with the int 3",
-	"3".to_float(),
-	IsNot.new(IsEqual.new(3)),
+    "to_float() must give a float, which IsEqual never confuses with the int 3",
+    "3".to_float(),
+    IsNot.new(IsEqual.new(3)),
 ).affirm()
 ```
 
@@ -49,9 +49,9 @@ Matchers wrap each other, so a precise claim needs no new code:
 
 ```gdscript
 Assertion.new(
-	"A scene path must start in res://scenes/ and end in .tscn",
-	"res://scenes/levels/forest.tscn",
-	AllOf.new([StartsWith.new("res://scenes/"), EndsWith.new(".tscn")]),
+    "A scene path must start in res://scenes/ and end in .tscn",
+    "res://scenes/levels/forest.tscn",
+    AllOf.new([StartsWith.new("res://scenes/"), EndsWith.new(".tscn")]),
 ).affirm()
 ```
 
@@ -92,9 +92,9 @@ Computed floats are rarely exact. `IsCloseTo` takes a tolerance:
 
 ```gdscript
 Assertion.new(
-	"sqrt(2) must be 1.41421 to five decimal places",
-	sqrt(2.0),
-	IsCloseTo.new(1.41421, 0.000005),
+    "sqrt(2) must be 1.41421 to five decimal places",
+    sqrt(2.0),
+    IsCloseTo.new(1.41421, 0.000005),
 ).affirm()
 ```
 
@@ -103,9 +103,9 @@ using their `is_equal_approx()`:
 
 ```gdscript
 Assertion.new(
-	"Rotating RIGHT by PI around UP must point LEFT, give or take rounding",
-	Vector3.RIGHT.rotated(Vector3.UP, PI),
-	IsApproximately.new(Vector3.LEFT),
+    "Rotating RIGHT by PI around UP must point LEFT, give or take rounding",
+    Vector3.RIGHT.rotated(Vector3.UP, PI),
+    IsApproximately.new(Vector3.LEFT),
 ).affirm()
 ```
 
@@ -115,9 +115,9 @@ Assertion.new(
 
 ```gdscript
 Assertion.new(
-	"Adding 2.50 USD to 1.75 USD must give 4.25 USD, a new but equal object",
-	Money.new(250, "USD").plus(Money.new(175, "USD")),
-	IsEqual.new(Money.new(425, "USD")),
+    "Adding 2.50 USD to 1.75 USD must give 4.25 USD, a new but equal object",
+    Money.new(250, "USD").plus(Money.new(175, "USD")),
+    IsEqual.new(Money.new(425, "USD")),
 ).affirm()
 ```
 
@@ -139,15 +139,15 @@ extends Matcher
 
 
 func matches(actual: Variant) -> bool:
-	return actual is int and int(actual) % 2 == 0
+    return actual is int and int(actual) % 2 == 0
 
 
 func description() -> String:
-	return "an even int"
+    return "an even int"
 
 
 func mismatch(actual: Variant) -> String:
-	return "was %d, an odd int" % actual if actual is int else "was %s" % [actual]
+    return "was %d, an odd int" % actual if actual is int else "was %s" % [actual]
 ```
 
 `description()` follows `Expected:` and `mismatch()` follows `but:` in the failure message. It
@@ -155,9 +155,9 @@ works anywhere a built-in matcher does:
 
 ```gdscript
 Assertion.new(
-	"range() with a step of 2 from 0 must give only even numbers",
-	range(0, 20, 2),
-	EveryItem.new(IsEven.new()),
+    "range() with a step of 2 from 0 must give only even numbers",
+    range(0, 20, 2),
+    EveryItem.new(IsEven.new()),
 ).affirm()
 ```
 

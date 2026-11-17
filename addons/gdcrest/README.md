@@ -10,11 +10,11 @@ extends GdUnitTestSuite
 
 
 func test_splits_text_in_its_original_order() -> void:
-	Assertion.new(
-		"split() must keep the parts in the order they appear",
-		"idle,run,jump".split(","),
-		Contains.new(["idle", "run", "jump"]),
-	).affirm()
+    Assertion.new(
+        "split() must keep the parts in the order they appear",
+        "idle,run,jump".split(","),
+        Contains.new(["idle", "run", "jump"]),
+    ).affirm()
 ```
 
 When it fails, the message says what was expected and what was wrong, and gdUnit4 points at the
@@ -45,9 +45,9 @@ Matchers wrap each other:
 
 ```gdscript
 Assertion.new(
-	"A scene path must start in res://scenes/ and end in .tscn",
-	"res://scenes/levels/forest.tscn",
-	AllOf.new([StartsWith.new("res://scenes/"), EndsWith.new(".tscn")]),
+    "A scene path must start in res://scenes/ and end in .tscn",
+    "res://scenes/levels/forest.tscn",
+    AllOf.new([StartsWith.new("res://scenes/"), EndsWith.new(".tscn")]),
 ).affirm()
 ```
 
@@ -102,15 +102,15 @@ extends Matcher
 
 
 func matches(actual: Variant) -> bool:
-	return actual is int and int(actual) % 2 == 0
+    return actual is int and int(actual) % 2 == 0
 
 
 func description() -> String:
-	return "an even int"
+    return "an even int"
 
 
 func mismatch(actual: Variant) -> String:
-	return "was %d, an odd int" % actual if actual is int else "was %s" % [actual]
+    return "was %d, an odd int" % actual if actual is int else "was %s" % [actual]
 ```
 
 `description()` follows `Expected:`, and `mismatch()` follows `but:`. `mismatch()` is only called
